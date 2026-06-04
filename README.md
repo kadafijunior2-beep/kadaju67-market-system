@@ -184,6 +184,79 @@ Visit `http://localhost:8000` and login with:
 | Payments | Payment tracking with receipt/PDF export |
 | Reports | Vendor, stall, revenue, and monthly reports with PDF |
 
+## Deployment
+
+### Deploy to Render (Free)
+
+This project is pre-configured with `render.yaml` for one-click deployment on Render.
+
+#### Prerequisites
+
+1. A [Render account](https://render.com) (free tier works)
+2. Push this repository to your GitHub account
+
+#### One-Click Deploy
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy)
+
+#### Manual Deploy Steps
+
+1. Log in to [Render Dashboard](https://dashboard.render.com)
+2. Click **New +** → **Blueprint**
+3. Connect your GitHub repository
+4. Render will auto-detect the `render.yaml` file
+5. Click **Apply** to create both the Web Service and PostgreSQL database
+6. Wait for the build and deploy (5-10 minutes)
+7. Visit your app at `https://kadaju67-market-system.onrender.com`
+
+#### Environment Variables (auto-configured via render.yaml)
+
+| Variable | Value |
+|---|---|
+| `APP_ENV` | production |
+| `APP_DEBUG` | false |
+| `DB_CONNECTION` | pgsql |
+| `SESSION_DRIVER` | file |
+| `CACHE_STORE` | file |
+| `QUEUE_CONNECTION` | database |
+| `LOG_LEVEL` | warning |
+
+#### First Login
+
+1. Run this in Render's **Shell** tab to seed initial data:
+   ```bash
+   php artisan db:seed --force
+   ```
+2. Login with:
+   - **Email:** `admin@kadaju67.com`
+   - **Password:** `password`
+
+**Important:** Change the password immediately after first login.
+
+### Free Hosting Alternatives
+
+| Platform | PHP Support | Database | Persistent Storage | Best For |
+|---|---|---|---|---|
+| **Render** | ✅ Native | PostgreSQL (1GB free) | ✅ (via PG) | Full Laravel apps |
+| **Railway** | ✅ Native | PostgreSQL (free) | ✅ | Quick deploys |
+| **Koyeb** | ✅ Native | PostgreSQL (free) | ✅ | Global edge |
+| **Fly.io** | ✅ Custom | PostgreSQL (free) | ✅ (3GB) | Production apps |
+| **InfinityFree** | ✅ | MySQL (free) | ✅ | Simple PHP sites |
+
+**Recommendation:** Render offers the simplest free Laravel deployment with built-in PostgreSQL and automated `render.yaml` support.
+
+### Production Optimization Checklist
+
+- [ ] `APP_DEBUG=false` — prevents stack trace leaks
+- [ ] `APP_ENV=production` — enables production optimizations
+- [ ] `LOG_LEVEL=warning` — reduces log verbosity
+- [ ] Cache config, routes, and views: `php artisan optimize`
+- [ ] Composer with `--no-dev --optimize-autoloader`
+- [ ] HTTPS enforced (auto with Render)
+- [ ] Database credentials set via environment variables
+- [ ] `SESSION_DRIVER` uses file or database (not array)
+- [ ] `SESSION_ENCRYPT=true` for secure session data
+
 ## License
 
 This project is open-source and available under the [MIT License](LICENSE).
