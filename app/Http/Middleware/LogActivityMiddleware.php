@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\ActivityLog;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,14 +14,16 @@ class LogActivityMiddleware
         $response = $next($request);
 
         if (auth()->check()) {
-            activity()
-                ->causedBy(auth()->user())
-                ->withProperties([
+            ActivityLog::create([
+                'user_id' => auth()->id(),
+                'action' => 'page_visit',
+                'description' => 'Page visited: ' . $request->path(),
+                'properties' => [
                     'url' => $request->fullUrl(),
                     'method' => $request->method(),
                     'ip' => $request->ip(),
-                ])
-                ->log('Page visited: ' . $request->path());
+                ],
+            ]);
         }
 
         return $response;
