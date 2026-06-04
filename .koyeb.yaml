@@ -1,0 +1,33 @@
+name: kadaju67-market-system
+docker:
+  dockerfile: Dockerfile
+regions:
+  - fra
+services:
+  - name: web
+    type: web
+    ports:
+      - port: 8000
+        protocol: http
+    env:
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: false
+      - key: APP_KEY
+        generator: APP_KEY
+      - key: APP_URL
+        value: https://kadaju67-market-system.koyeb.app
+      - key: DB_CONNECTION
+        value: pgsql
+      - key: SESSION_DRIVER
+        value: file
+      - key: CACHE_STORE
+        value: file
+      - key: QUEUE_CONNECTION
+        value: database
+      - key: LOG_LEVEL
+        value: warning
+    routes:
+      - path: /
+        port: 8000

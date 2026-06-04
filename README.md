@@ -186,64 +186,49 @@ Visit `http://localhost:8000` and login with:
 
 ## Deployment
 
-### Deploy to Render (Free)
+### Deploy to Koyeb (Free)
 
-This project is pre-configured with `render.yaml` for one-click deployment on Render.
+This project is pre-configured with `Dockerfile` and `.koyeb.yaml` for deployment on Koyeb.
 
 #### Prerequisites
 
-1. A [Render account](https://render.com) (free tier works)
+1. A [Koyeb account](https://app.koyeb.com) (free tier works, no credit card)
 2. Push this repository to your GitHub account
 
-#### One-Click Deploy
+#### Steps
 
-[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy)
-
-#### Manual Deploy Steps
-
-1. Log in to [Render Dashboard](https://dashboard.render.com)
-2. Click **New +** → **Blueprint**
-3. Connect your GitHub repository
-4. Render will auto-detect the `render.yaml` file
-5. Click **Apply** to create both the Web Service and PostgreSQL database
-6. Wait for the build and deploy (5-10 minutes)
-7. Visit your app at `https://kadaju67-market-system.onrender.com`
-
-#### Environment Variables (auto-configured via render.yaml)
-
-| Variable | Value |
-|---|---|
-| `APP_ENV` | production |
-| `APP_DEBUG` | false |
-| `DB_CONNECTION` | pgsql |
-| `SESSION_DRIVER` | file |
-| `CACHE_STORE` | file |
-| `QUEUE_CONNECTION` | database |
-| `LOG_LEVEL` | warning |
+1. Log in to [Koyeb Dashboard](https://app.koyeb.com)
+2. Click **Create App**
+3. Select **GitHub** as the deployment method
+4. Connect your GitHub account and select `kadaju67-market-system`
+5. Koyeb will auto-detect the `Dockerfile`
+6. Under **Environment Variables**, add:
+   - `DB_CONNECTION` → `pgsql`
+   - `SESSION_DRIVER` → `file`
+   - `CACHE_STORE` → `file`
+   - `QUEUE_CONNECTION` → `database`
+   - `LOG_LEVEL` → `warning`
+7. Click **Deploy** and wait for the build (5-10 minutes)
+8. **Add PostgreSQL:**
+   - Go to your app → **Services** → **Add Service**
+   - Select **Database** → **PostgreSQL**
+   - Copy the connection details shown
+   - Go back to your app's **Environment Variables** and add:
+     - `DB_HOST`, `DB_PORT`, `DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD`
+9. Your app will restart automatically. Visit the Koyeb-generated URL.
 
 #### First Login
 
-1. Run this in Render's **Shell** tab to seed initial data:
+1. Open the **Web Console** in your Koyeb app dashboard
+2. Run:
    ```bash
    php artisan db:seed --force
    ```
-2. Login with:
+3. Login with:
    - **Email:** `admin@kadaju67.com`
    - **Password:** `password`
 
 **Important:** Change the password immediately after first login.
-
-### Free Hosting Alternatives
-
-| Platform | PHP Support | Database | Persistent Storage | Best For |
-|---|---|---|---|---|
-| **Render** | ✅ Native | PostgreSQL (1GB free) | ✅ (via PG) | Full Laravel apps |
-| **Railway** | ✅ Native | PostgreSQL (free) | ✅ | Quick deploys |
-| **Koyeb** | ✅ Native | PostgreSQL (free) | ✅ | Global edge |
-| **Fly.io** | ✅ Custom | PostgreSQL (free) | ✅ (3GB) | Production apps |
-| **InfinityFree** | ✅ | MySQL (free) | ✅ | Simple PHP sites |
-
-**Recommendation:** Render offers the simplest free Laravel deployment with built-in PostgreSQL and automated `render.yaml` support.
 
 ### Production Optimization Checklist
 
